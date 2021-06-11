@@ -1,96 +1,93 @@
 (function () {
-	const SUBMIT = document.getElementsByTagName('input')[0];
-	const TABLE = document.getElementsByTagName('table')[0];
-	let httpReq;
+	'use strict';
+    const SUBMIT = document.getElementsByTagName('input')[0];
+    let httpReq;
 
-	SUBMIT.addEventListener('click', function () {
-		requestFile('my_college_degrees.json');
-	});
+    SUBMIT.addEventListener('click', function () {
+        requestFile('data/my_college_degrees.json');
+    });
 
-	function requestFile(url) {
-		httpReq = new XMLHttpRequest();
+    function requestFile(file) {
+        httpReq = new XMLHttpRequest();
+        httpReq.onreadystatechange = displayHTML;
+        httpReq.open('GET', file);
+        httpReq.send();
+    }
 
-		if(!httpReq) {
-			alert('Exiting. Cannot create an XMLHTTP instance');
-			return false;
-		}
-		httpReq.onreadystatechange = displayHTML;
-		httpReq.open('GET', url);
-		httpReq.send();
-	}
-	function displayHTML() {
-		if (httpReq.readyState === XMLHttpRequest.DONE) {
-			if (httpReq.status === 200) {
-				const obj = JSON.parse(httpReq.responseText);
-				console.log(Object.keys(obj.my_college_degrees[0].degree));
+    function displayHTML() {
+        if (httpReq.readyState === XMLHttpRequest.DONE) {
+            if (httpReq.status === 200) {
+				const OBJ = JSON.parse(httpReq.responseText);
+				const BODY = document.getElementsByTagName('body')[0];
+				const TABLE = document.createElement('table');
+                const THEAD = document.createElement('thead');
+                const TR = document.createElement('tr');
+                const TBODY = document.createElement('tbody');
+                createTableStructure(BODY, TABLE, THEAD, TBODY);
+                createColumnNames(OBJ, THEAD, TR);
+                addCellValues(OBJ, TBODY);
+                showTable(TABLE);
+                disableSubmit(SUBMIT);
+                addImage(BODY);
+            }
+        }
+    }
 
-	
-				const thead = document.createElement('thead');
-				const tr = document.createElement('tr');
-				thead.appendChild(tr);
-				TABLE.appendChild(thead);
-				const tbody = document.createElement('tbody');
-				TABLE.appendChild(tbody);
+	function createTableStructure(BODY, TABLE, THEAD, TBODY) {
+		TABLE.appendChild(THEAD);
+		TABLE.appendChild(TBODY);
+		TABLE.setAttribute('id', 'degree-table');
+		TABLE.setAttribute('class', 'table-hidden');
+		BODY.appendChild(TABLE);
+    }
 
-				
-				const collegeDegreesProperties = Object.keys(obj.my_college_degrees[0].degree);
-				for (var i = 0; i < collegeDegreesProperties.length; i++) {
-					console.log(collegeDegreesProperties[i]);
-					const th = document.createElement('th');
-					let upperCaseThTextContent = collegeDegreesProperties[i].charAt(0).toUpperCase() + collegeDegreesProperties[i].slice(1);
-					let thTextContent = document.createTextNode(upperCaseThTextContent);
-				
-					th.appendChild(thTextContent);
-					tr.appendChild(th);
-				}
+    function createColumnNames(OBJ, THEAD, TR) {
+        THEAD.appendChild(TR);
+        const COLLEGE_DEGREE_PROPERTIES = Object.keys(OBJ.my_college_degrees[0].degree);
+        for (let i = 0; i < COLLEGE_DEGREE_PROPERTIES.length; i++) {
+            const TH = document.createElement('th');
+            const TH_TEXT_CONTENT = document.createTextNode(COLLEGE_DEGREE_PROPERTIES[i]);
+            TH.appendChild(TH_TEXT_CONTENT);
+            TR.appendChild(TH);
+        }
+    }
 
-				for (var i = 0; i < obj.my_college_degrees.length; i++) {
-					const collegeDegreeValues = Object.values(obj.my_college_degrees[i].degree);
-					const trBody = document.createElement('tr');
-					tbody.appendChild(trBody);
+    function addCellValues(OBJ, TBODY) {
+        for (let i = 0; i < OBJ.my_college_degrees.length; i++) {
+            const COLLEGE_DEGREE_VALUES = Object.values(OBJ.my_college_degrees[i].degree);
+            const TR_BODY = document.createElement('tr');
+            TBODY.appendChild(TR_BODY);
+            for (const VAL in COLLEGE_DEGREE_VALUES) {
+                const td = document.createElement('td');
+                const tdText = document.createTextNode(COLLEGE_DEGREE_VALUES[VAL]);
+                td.appendChild(tdText);
+                TR_BODY.appendChild(td);
+            }
 
-					for (const i in collegeDegreeValues) {
-						console.log(collegeDegreeValues[i]);
-						const td = document.createElement('td');
-						const tdText = document.createTextNode(collegeDegreeValues[i]);
-						td.appendChild(tdText);
-						trBody.appendChild(td);
-					}
-					
-				}
+        }
+    }
 
-				const body = document.getElementsByTagName('body')[0];
-				
-				
+    function showTable(TABLE) {
+        TABLE.classList.remove('table-hidden');
+        TABLE.classList.add('table-shown');
+        document.getElementById('degree-table').style.width = '75%';
+        document.getElementById('degree-table').style.margin = '0 auto';
+    }
 
-					TABLE.classList.remove('table-hidden');
-				TABLE.classList.add('table-shown');
-				document.getElementById('degree-table').style.width = '75%';
-				document.getElementById('degree-table').style.margin = '0 auto';
-				const image = document.createElement('img');
-				image.src = 'images/graduation-cap.png';
-				image.alt = '';
-				image.style.width = '24%';
-				image.style.marginTop = '100px';
-				image.style.marginLeft = '38%';
-				image.style.marginRight = '38%';
-				body.appendChild(image);
-				SUBMIT.disabled = true;
-				SUBMIT.classList.remove('enabledSubmit');
-				SUBMIT.classList.add('disabledSubmit');
+    function disableSubmit(SUBMIT) {
+        SUBMIT.disabled = true;
+        SUBMIT.classList.remove('enabled-submit');
+        SUBMIT.classList.add('disabled-submit');
+    }
 
-
-
-				
-
-
-		
-
-
-				
-			} else {
-				alert("Problematic request.");
-			}
-		}
-	}
+    function addImage(BODY) {
+        const IMAGE = document.createElement('img');
+        IMAGE.src = 'images/graduation-cap.png';
+        IMAGE.alt = '';
+        IMAGE.style.width = '24%';
+        IMAGE.style.marginTop = '100px';
+        IMAGE.style.marginLeft = '38%';
+        IMAGE.style.marginRight = '38%';
+        BODY.appendChild(IMAGE);
+    }
 })();
