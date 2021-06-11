@@ -67,9 +67,19 @@
 				TABLE.classList.add('table-shown');
 				document.getElementById('degree-table').style.width = '75%';
 				document.getElementById('degree-table').style.margin = '0 auto';
+				const image = document.createElement('img');
+				image.src = 'images/graduation-cap.png';
+				image.alt = '';
+				image.style.width = '24%';
+				image.style.marginTop = '100px';
+				image.style.marginLeft = '38%';
+				image.style.marginRight = '38%';
+				body.appendChild(image);
 				SUBMIT.disabled = true;
 				SUBMIT.classList.remove('enabledSubmit');
 				SUBMIT.classList.add('disabledSubmit');
+
+
 
 				
 
