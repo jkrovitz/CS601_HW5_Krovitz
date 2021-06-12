@@ -5,25 +5,32 @@ body {
 input[type=submit] {
     font-family: 'Times New Roman', Times, serif;
     font-size: 1.5em;
-    cursor: pointer;
-    width: 40%;
     margin-bottom: 50px;
-    margin-left: 25%;
-    margin-right: 25%;
+    margin-left: 30%;
+    margin-right: 30%;
     margin-top: 20px;
-    padding: 14px 10px;
+    padding: 14px 20px;
+    display: inline-block;
+}
+
+@media only screen and (max-width: 768px) {
+    input[type=submit] {
+        font-size: 1em;
+    }
 }
 
 .enabled-submit {
     color: white;
     background-color: #01426a;
     border: none;
+    cursor: pointer;
 }
 
 .disabled-submit {
     border: 1px solid #999999;
     background-color: #cccccc;
     color: #666666;
+    cursor: not-allowed;
 }
 
 .text-center {
@@ -33,9 +40,9 @@ input[type=submit] {
 table {
     font-family: 'Times New Roman', Times, serif;
     border-collapse: collapse;
-    margin-right: 50%;
-    margin-left: 50%;
+    margin: 0 auto;
     max-width: 900px;
+    width: 75%;
 }
 
 .table-hidden {
@@ -57,6 +64,13 @@ th {
     font-size: 1.65em;
 }
 
+@media only screen and (max-width: 768px) {
+    td,
+    th {
+        font-size: 1.15em;
+    }
+}
+
 table tr:hover {
     background-color: #ddd;
 }
@@ -66,4 +80,9 @@ table th {
     padding-bottom: 12px;
     background-color: #01426a;
     color: white;
+}
+
+img {
+    width: 24%;
+    margin: 100px 38%;
 }
